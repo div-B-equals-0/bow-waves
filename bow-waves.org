@@ -1,0 +1,29 @@
+* Bow waves
++ These are optically thin, radiation-supported bows in the strong coupling limit
+
+** 1D flow structure along stagnation line
++ I had some handwritten notes on this, but not sure where they are
+
++ Velocity profile in radiative braking zone
+  | R/R_0 | v / v_0 |
+  |------+--------|
+  |    1 |      0 |
+  |  1.1 |   0.30 |
+  |  1.2 |   0.41 |
+  |  1.5 |   0.58 |
+  |   2. |   0.71 |
+  |  4.0 |   0.87 |
+  #+TBLFM: $2=sqrt(1 - 1/$1) ;f2
+
+** Possible role of instabilities
+
+
+** Analogy with sudden radiative braking in interacting binaries
++ Gayley:1997a (also Owocki:1995a but it doesn't say much)
++ Important when momentum ratio \beta in winds is high
++ You can have the case where the ram pressure of the weaker wind is never enough since it is still ramping up in the acceleration zone, so the interaction region would be pushed into photosphere
++ Instead the absorbed radiation from the weaker-wind star is what balances the strong wind ram pressure.
++ It is through line opacity, so not the same as our continuum case really
++ They have an analytic formula for the velocity law
++ They do not seem to be interested in the sonic transition, and whether there is a shock
+
