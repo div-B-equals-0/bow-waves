@@ -3,7 +3,6 @@
 
 ** 1D flow structure along stagnation line
 + I had some handwritten notes on this, but not sure where they are
-
 + Velocity profile in radiative braking zone
   | R/R_0 | v / v_0 |
   |------+--------|
@@ -14,9 +13,104 @@
   |   2. |   0.71 |
   |  4.0 |   0.87 |
   #+TBLFM: $2=sqrt(1 - 1/$1) ;f2
++ RBW case
+  + R_*^2 = L / 4 \pi c \rho v^2 for optically thick case
+  + \tau_* = \kappa \rho R_*
+  + R_0 = 2 \tau_* R_* = 2 \rho \kappa R_*^2 for RBW (\eta < \tau < 1)
+  + \tau = 2 \kappa \rho R_0 = 4 \rho^2 \kappa^2 R_*^2 = \tau_*^2
+  + R_{**} = \kappa L / 2 \pi c v_\infty^2 and this is what we should use to normalise distances
+  + Because, then the velocity and density field outside the shock is given
++ If the shock occurs at R_s then, only a fraction f_rds of the ram pressure has been balanced in the supersonic flow
+  + This leaves a residual stream ram pressure that must balance the pressure of the shocked shell
+    + P_stream = \rho (v^2 + c^2) where \rho v is constant
+      + P = \rho v (v + c^2 / v) = (\rho v) v (1 + 1/M^2) = (\rho v) c (M + 1/M)
+      + M + 1/M has a minimum of 2 at M = 1
+    + What is actual momentum equation?
+      + \nabla.(P + \rho v^2) = -g \rho
+      + We can't actually use plane parallel geometry since the streamlines do start to diverge as we approach R_{**}
+        + From Paper II, this actually only happens very close to the turnaround radius
+      + But then they converge again in the wings of the bow
+      + But still, \rho v will be approximately conserved near the axis, certainly in the supersonic part
+      + So we have that d/dx (M + 1/M) = -1/ M x^2
+        + supersonic M dM = -dx / x^2 => M^2 \propto 1 - 1/x
+        + general MdM + M d(1/M) = M dM - (1/M) dM = 0.5 M^2 - ln(M)
+        + So if 1 - 1/r = A(M)/A(M_\infty) => r(M) = 1 /(1 - A(M)/A(M_\infty))
+          |   M |  M^2/2 | M^2/2 - ln(M) |       r |    \rho | r(ballistic) |
+          |-----+-------+--------------+---------+------+--------------|
+          | 0.5 | 0.125 |   0.81814718 |    1.32 | 6.00 |         1.03 |
+          | 0.9 | 0.405 |   0.51036052 |    1.18 | 3.33 |         1.10 |
+          |   1 |   0.5 |          0.5 |    1.17 |    3 |         1.13 |
+          | 1.1 | 0.605 |   0.50968982 |    1.18 | 2.73 |         1.16 |
+          | 1.5 | 1.125 |   0.71953489 |    1.27 | 2.00 |         1.33 |
+          |   2 |     2 |    1.3068528 |    1.62 | 1.50 |         1.80 |
+          | 2.5 | 3.125 |    2.2087093 |    2.85 | 1.20 |         3.27 |
+          | 2.7 | 3.645 |    2.6517482 |    4.53 | 1.11 |         5.26 |
+          |   3 |   4.5 |    3.4013877 | 5556.10 |    1 |     1 / 0.00 |
+          #+TBLFM: $2=$1**2 / 2::$3=$2 - log($1)::$4=1 / (1 - $-1/3.402);f2::$5=3/$1;f2::$6=1/(1 - $2/4.5);f2
+        + Try the same but for M = 7
+          |   M |  M^2/2 | M^2/2 - ln(M) |        r |     \rho | r(ballistic) |
+          |-----+-------+--------------+----------+-------+--------------|
+          | 0.5 | 0.125 |   0.81814718 |     1.04 | 14.00 |         1.01 |
+          | 0.9 | 0.405 |   0.51036052 |     1.02 |  7.78 |         1.02 |
+          |   1 |   0.5 |          0.5 |     1.02 |     7 |         1.02 |
+          | 1.1 | 0.605 |   0.50968982 |     1.02 |  6.36 |         1.03 |
+          | 1.5 | 1.125 |   0.71953489 |     1.03 |  4.67 |         1.05 |
+          |   2 |     2 |    1.3068528 |     1.06 |  3.50 |         1.09 |
+          | 2.5 | 3.125 |    2.2087093 |     1.11 |  2.80 |         1.15 |
+          | 2.7 | 3.645 |    2.6517482 |     1.13 |  2.59 |         1.17 |
+          |   3 |   4.5 |    3.4013877 |     1.18 |  2.33 |         1.23 |
+          |   4 |     8 |    6.6137056 |     1.42 |  1.75 |         1.48 |
+          |   5 |  12.5 |    10.890562 |     1.93 |  1.40 |         2.04 |
+          |   6 |    18 |    16.208241 |     3.56 |  1.17 |         3.77 |
+          |   7 |  24.5 |    22.554090 | -5513.45 |     1 |     1 / 0.00 |
+          #+TBLFM: $2=$1**2 / 2::$3=$2 - log($1)::$4=1 / (1 - $-1/22.55);f2::$5=7/$1;f2::$6=1/(1 - $2/24.5);f2
+        + Subsonic branch
+          + This is probably best interpreted in terms of density
+          + Use \rho c_s M = \Phi_0 => M = (\Phi_0/c_s) \rho^-1
+          + 0.5 M^2 - ln(M) \to 0.5 (\Phi_0/c_s)^2 \rho^-2 + ln(\rho) + ln(\Phi_0/c_s)
+          + This isn't going anywhere
+  + [ ] What does this do for my arguments in paper III?  Does it mean that the shell pressure can fall below what I thought? 
++ Radiative turnaround 
 
++ Pressure balance in shocked shell:
+  + P_cd = P_2 (1 + M_2^2) exp(-h / H)
+  + h is shell thickness, H/R = 2 /M_\infty^2  is effective gravity scale height
+    + E.g., M_\infty = 3 means H/R = 0.22
+  + This has to match ram pressure of shocked stellar wind, which is \eta_w/\tau times smaller than the trapped radiation pressure
+
+
+
+** Figure of shell profiles
++ WBS
+  + M_\infty = 3
+    + n1 = 3, n2 = 9, n3 = 9.5
+    + T1 = 3.667, c1 = 1.91
+    + v1 = 1.0, v2 = 0.333, h = 0.061
+    + Assume dcool = h/2
++ RBW
+  + M_\infty = 3 and M_0 = 1.5
+  + Shock at R = 1.27 R_\infty
+  + Pre-shock density has increased to \rho_0 = 2 \rho_\infty
+    + Very slow ramp: M = 2 @ R = 1.62 and \rho = 1.5 \rho_\infty
+  + n1 = 1.714 n0 = 3.428 n_inf
+  + n2 = 2.25 n0 = 4.5 n_inf
+  + n3 = 2.75 n0 = 5.5 n_inf
+  + Subsonic pressure scale height: h = 2 / 9 = 0.22
+  + v1 = 0.875, v2 = 0.666
+  + T1 = 1.495, c1 = 1.223
+
++ RBS
+** Integration along line of sight
++ Appearance on plane of sky can be approximated by integrating in spherical symmetry
+  + I(y) = \int_-\infty^\infty j(r) d s  =  \int_y^\infty j(r) (1 - y^2/r^2)^{-1/2} dr
+  + 
 ** Possible role of instabilities
 
+
+** Flow just off the axis
++ For the ballistic solution, we can find the \theta component of the velocity as a function of \theta
++ We can estimate the effects of lateral radiation pressure in the shocked shell
++ 
 
 ** Analogy with sudden radiative braking in interacting binaries
 + Gayley:1997a (also Owocki:1995a but it doesn't say much)
